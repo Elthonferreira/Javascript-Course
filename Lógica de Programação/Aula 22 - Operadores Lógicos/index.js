@@ -2,7 +2,7 @@
     Operadores Lógicos
 
     && -> AND -> E   -> Todas as expressões precisam ser verdadeiras para retornar true
-    || -> OR  -> OU
+    || -> OR  -> OU  -> Todas as expressões precisam ser falsas para retornar false 
     !  -> NOT -> NÃO
 */
 
