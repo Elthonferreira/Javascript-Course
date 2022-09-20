@@ -1,49 +1,63 @@
 // Capturar o evento de submit do formulário
 
-function meuEscopo() {
-    const form = document.querySelector('.formulario'); // classe = .form | id = #form
-    const resultado = document.querySelector('.resultado');
+const form = document.querySelector('#formulario'); // classe = .form | id = #form
 
-    function recebeEventoForm(evento) {
-        evento.preventDefault();
+form.addEventListener('submit', function (e) {
+    e.preventDefault(); // Previne evento (evita o formulário ser enviado)
 
-        let peso = form.querySelector('.peso');
-        let altura = form.querySelector('.altura');
+    const inputPeso = form.querySelector('.peso'); // Pega elemento do input peso
+    const inputAltura = form.querySelector('.altura'); // Pega elemento do input altura
 
-        let imc; // peso / (altura²)
-        imc = peso.value / (altura.value * altura.value);
+    const peso = Number(inputPeso.value); // Cria constante peso e converte para number
+    const altura = Number(inputAltura.value); // Cria constante altura e converte para number
 
-        imc = Number(imc.toFixed(1));
+    if (!peso) { // NaN, null, ' ' avaliam como falsy, então se peso for !false, informa o erro
+        setResultado('Peso inválido', false); // Seta mensagem e informa que não é valido
+        return; // Sai da função
+    }
 
-        console.log(peso.value);
-        console.log(altura.value);
-        console.log("IMC: " + imc);
+    if (!altura) { // NaN, null, ' ' avaliam como falsy, então se peso for !false, informa o erro
+        setResultado('Altura inválida', false); // Seta mensagem e informa que não é valido
+        return; // Sai da função 
+    }
 
-        console.log(typeof altura);
-        console.log(typeof peso);
+    const imc = getImc(peso, altura); // Calcula imc
+    const nivelImc = getNivelImc(imc); // Pega o nível do imc
 
-        // if (typeof peso === 'number') {
-            // resultado.innerHTML = `<p>Peso Inválido!</p>`
-        // } else if (typeof altura === 'number') {
-            // resultado.innerHTML = `<p>Altura Inválida!</p>`
-        // } else {
-            if (imc < 18.5) {
-                resultado.innerHTML = `<p class="success">Seu IMC é ${imc} (Abaixo do peso)</p>`
-            } else if (imc >= 18.5 && imc <= 24.9) {
-                resultado.innerHTML = `<p class="success">Seu IMC é ${imc} (Peso normal)</p>`
-            } else if (imc >= 25 && imc <= 29.9) {
-                resultado.innerHTML = `<p class="success">Seu IMC é ${imc} (Sobrepeso)</p>`
-            } else if (imc >= 30 && imc <= 34.9) {
-                resultado.innerHTML = `<p class="success">Seu IMC é ${imc} (Obesidade grau 1)</p>`
-            } else if (imc >= 35 && imc <= 39.9) {
-                resultado.innerHTML = `<p class="success">Seu IMC é ${imc} (Obesidade grau 2)</p>`
-            } else {
-                resultado.innerHTML = `<p class="success">Seu IMC é ${imc} (Obesidade grau 3)</p>`
-            }
-        // }
-    };
+    const msg = `Seu IMC é ${imc} (${nivelImc}).`; // Seta a mensagem
+    setResultado(msg, true); // Seta a mensagem e informa que é válida
 
-    form.addEventListener('submit', recebeEventoForm);
+});
+
+function getNivelImc(imc) {
+    const nivel = ['Abaixo do peso', 'Peso normal', 'Sobrepeso',
+        'Obesidade grau 1', 'Obesidade grau 2', 'Obesidade grau 3']; // Array com os níveis de IMC
+
+    if (imc < 18.5)                 return nivel[0];
+    if (imc >= 18.5 && imc <= 24.9) return nivel[1];
+    if (imc >= 25 && imc <= 29.9)   return nivel[2];
+    if (imc >= 30 && imc <= 34.9)   return nivel[3];
+    if (imc >= 35 && imc <= 39.9)   return nivel[4];
+    if (imc > 39.9)                 return nivel[5];
+    
 }
 
-meuEscopo();
+function getImc(peso, altura) {
+    const imc = peso / altura ** 2; // Cálculo de IMC
+    return imc.toFixed(1); // Retorna IMC com 1 casa décimal
+}
+
+function setResultado(msg, isValid) {
+    const resultado = document.querySelector('#resultado'); // Pega elemento resultado (div)
+    resultado.innerHTML = ''; // Limpa a tela de resultado
+
+    const p = document.createElement('p'); // Cria elemento p (paragrafo); 
+    if (isValid) { // Verifica se o IMC é válido
+        p.classList.add('paragrafo-resultado-success'); // Se for válido, vai para a classe com fundo verde
+    } else {
+        p.classList.add('paragrafo-resultado-error'); // Se não, vai para a classe com fundo vermelho
+    } 
+    
+    p.innerHTML = msg; // Coloca a mensagem recebida da função no paragrafo
+    resultado.appendChild(p); // Coloca o paragrafo na div resultado
+}

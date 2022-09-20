@@ -78,5 +78,15 @@ td {
 }
 
 p.success {
-    background: --(var --color-buttom-success);
+    background: var(--color-buttom-success);
+}
+
+.paragrafo-resultado-success {
+    background: var(--color-buttom-success);
+    padding: 4px;
+}
+
+.paragrafo-resultado-error {
+    background: var(--color-buttom-error);
+    padding: 4px;
 }
