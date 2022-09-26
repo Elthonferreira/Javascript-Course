@@ -2,11 +2,11 @@
 
 const frutas = ['Pêra', 'Maçã', 'Uva'];
 
-for (let i = 0; i < frutas.length; i++){
+for (let i = 0; i < frutas.length; i++){ // for normal
     console.log(frutas[i]);
 }
 
-for (let i in frutas) {
+for (let i in frutas) { // for in -> i recebe os índices, para exibir os valores, faz frutas[i]
     console.log(frutas[i]);
 }
 
@@ -16,6 +16,6 @@ const pessoa = {
     idade: 26
 };
 
-for (let key in pessoa) {
+for (let key in pessoa) { // key recebe os chaves do objeto, para acessar os valores, faz pessoa[key]
     console.log(key, pessoa[key]);
 }
