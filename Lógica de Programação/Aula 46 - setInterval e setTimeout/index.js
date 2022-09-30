@@ -1,5 +1,7 @@
+let data = new Date('01-01-1970 00:00:00');
+
 function mostraHora() {
-    let data = new Date();
+    data.setSeconds(1);
 
     return data.toLocaleString('pt-BR', {
         hour: '2-digit',
@@ -17,7 +19,8 @@ function mostraHora() {
 // setInterval(funcaoDoInterval, 1000); // Passando a referência do que quer que seja executado, de 1 em 1 segundo (1000 milisegundos)
 
 const timer = setInterval(function () { // seta um intervalo para executar determinado código
-    console.log(mostraHora());
+    console.log(mostraHora() + 1);
+
 }, 1000);
 
 setTimeout(function() { // seta um tempo para executar determinado código
