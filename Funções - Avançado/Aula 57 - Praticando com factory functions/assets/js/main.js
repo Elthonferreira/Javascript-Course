@@ -59,7 +59,7 @@ function criaCalculadora() {
         }, // retirado o .bind(this), pois as arrow functions não mudam o comportamento do this
 
         btnParaDisplay(valor) {
-            this.display.value  += valor;
+            this.display.value  += valor; // reescreve no display o valor digitado
         }, 
 
         apagaUltimoDigito(digitos) {
