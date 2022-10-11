@@ -8,7 +8,7 @@ function Calculadora() {
         this.pressionaEnter();
     };
 
-    this.pressionaEnter = () => {
+    this.pressionaEnter  = () => {
         this.display.addEventListener('keyup', e => { // quando keyup (soltar o botão)
             if (e.keyCode === 13) { // verifica se o código do botão é 13 (enter)
                 this.realizaConta(this.display.value); // se sim, realiza a conta
