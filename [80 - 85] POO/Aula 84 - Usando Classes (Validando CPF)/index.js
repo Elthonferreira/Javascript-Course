@@ -31,88 +31,59 @@ class ValidaCPF {
         return sequencia === this.cpfLimpo; // se sequencia for igual ao CPF limpo, é uma sequencia, então retorna true, senão retorna false
     }
 
-    somatorioParte1(cpf) {
-        let cpfLimpo = cpf.replace(/\D+/g, '');
+    verificaCPF(cpf, parte) {
+        let digito;
+        let numeroFormula;
         let somatorio = 0;
-        let auxPrimeiroDigito = 10;
-        for (let i of cpfLimpo) {
-            somatorio = somatorio + (i * auxPrimeiroDigito);
-            auxPrimeiroDigito--;
-            if (auxPrimeiroDigito < 2) break;
+        let posicao;
+
+        if (parte === 1) {
+            numeroFormula = 10;     // if parte1 ultimo digito é 10
+            posicao = cpf[9];       // if parte1 checa a posição 9 do CPF           
+        } 
+        if (parte === 2) {
+            numeroFormula = 11;     // if parte1 ultimo digito é 11
+            posicao = cpf[10];      // if parte2 checa a posição 10 do CPF
+        } 
+        
+        for (let i of cpf) {
+            somatorio += (i * numeroFormula); 
+            numeroFormula--;
+            if (numeroFormula < 2) break;
         }
-        return somatorio;
-    }
     
-    verificaParte1(cpf, somatorioCPF) {
-        let cpfLimpo = cpf.replace(/\D+/g, '');
-        let primeiroDigito;
-    
-        if (11 - (somatorioCPF % 11) > 9) primeiroDigito = 0;
-        else primeiroDigito = (11 - (somatorioCPF % 11));
-    
+        if (11 - (somatorio % 11) > 9) {
+            digito = 0;                           // Fórmula
+        } else {
+            digito = (11 - (somatorio % 11));     // Fórmula 
+        } 
+        
+        if (digito == posicao) {
+            return true;
+        } else {
+            return false;
+        }
         //console.log('primeiro digito calculo: ' + primeiroDigito);
         //console.log('primeiro digito cpfLimpo: ' + cpfLimpo[9]);
-    
-        if (primeiroDigito == cpfLimpo[9]) {
-            return true;
-        } else {
-            return false;
-        }
     }
-    
-    somatorioParte2(cpf) {
-        let cpfLimpo = cpf.replace(/\D+/g, '');
-        let somatorio = 0;
-        let auxSegundoDigito = 11;
-        for (let i of cpfLimpo) {
-            somatorio = somatorio + (i * auxSegundoDigito);
-            auxSegundoDigito--;
-            if (auxSegundoDigito < 2) break;
-        }
-        return somatorio;
-    }
-    
-    verificaParte2(cpf, somatorioCPF) {
-        let cpfLimpo = cpf.replace(/\D+/g, '');
-        let segundoDigito;
-    
-        if (11 - (somatorioCPF % 11) > 9) segundoDigito = 0;
-        else segundoDigito = (11 - (somatorioCPF % 11));
-    
-        //console.log('Segundo digito calculo: ' + segundoDigito);
-        //console.log('Segundo digito cpfLimpo: ' + cpfLimpo[10]);
-    
-        if (segundoDigito == cpfLimpo[10]) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    validarCPF(cpf) {
-        // somatorioParte1(cpf);
-        //console.log(somatorioParte1(cpf));
-        //console.log(verificaParte1(cpf, somatorioParte1(cpf)));
-        //console.log(somatorioParte2(cpf));
-        //console.log(verificaParte2(cpf, somatorioParte2(cpf)));
-        if (this.verificaParte1(cpf, this.somatorioParte1(cpf)) && this.verificaParte2(cpf, this.somatorioParte2(cpf))) {
+
+    validarCPF() {
+        // se cair em um desses if's, o cpf já é inválido.
+        if (!this.cpfLimpo) return false;                     // Se não existir cpfLimpo
+        if (typeof this.cpfLimpo !== 'string') return false;  // Se cpfLimpo não for uma string
+        if (this.cpfLimpo.length !== 11) return false;        // Se cpfLimpo não tiver exatamente tamanho 11
+        if (this.isSequence()) return false;                  // Se cpfLimpo for uma sequencia
+
+        const firstPartCPF  = this.verificaCPF(this.cpfLimpo, 1); // Retorna true ou false
+        const secondPartCPF = this.verificaCPF(this.cpfLimpo, 2); // Retorna true ou false
+
+        if (firstPartCPF && secondPartCPF) {
             return 'CPF válido.';
         } else {
             return 'CPF inválido.';
         }
     }
-
-    isValid() {
-                                                              // se cair em um desses if's, o cpf já é inválido.
-        if (!this.cpfLimpo) return false;                     // Se não existir cpfLimpo
-        if (typeof this.cpfLimpo !== 'string') return false;  // Se cpfLimpo não for uma string
-        if (this.cpfLimpo.length !== 11) return false;        // Se cpfLimpo não tiver exatamente tamanho 11
-        if (this.isSequence()) return false;                  // Se cpfLimpo for uma sequencia
-        console.log(this.cpfLimpo);
-        this.validarCPF(this.cpfLimpo);
-    }
 }
 
-const validaCpf = new ValidaCPF('070.987.720-03');
-
-console.log(validaCpf.isValid());
+const cpf = new ValidaCPF('070.987.720-03');
+console.log(cpf.validarCPF());
